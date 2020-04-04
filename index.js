@@ -23,38 +23,50 @@ client.on('message', async message => {
         var args = message.content.substring(1).split(' ');
         var cmd = args[0];
 
-        // args = args.splice(1);
         switch (cmd) {
             case 'punish':
-                const user = message.mentions.users.first();
-                if (user) {
-                    const member = message.guild.member(user);
+                if (message.member.hasPermission('ADMINISTRATOR')) {
+                    console.log('User is an admin.');
 
-                    if (member) {
-                        const msg = await message.channel.send("By the grace of God you will suffer " + user.username);
-                        // console.log(member.roles._roles);
-                        var usersRoles = member.roles._roles;
-                        var punishRole = member.guild.roles.cache.find(role => role.name === "Pennant");
+                    const user = message.mentions.users.first();
+                    if (user) {
+                        const member = message.guild.member(user);
 
-                        if (usersRoles && punishRole) {
-                            var removeRoles = member.roles.remove(usersRoles);
-                            var addPunish = member.roles.add(punishRole);
-                            const waitTime = args[2];
+                        if (member) {
+                            const msg = await message.channel.send("By the grace of God you will suffer <@" + user.id + ">");
+                            var usersRoles = member.roles._roles;
+                            var punishRole = member.guild.roles.cache.find(role => role.name === "Pennant");
 
-                            await sleep(waitTime);
+                            if (usersRoles && punishRole) {
+                                var removeRoles = member.roles.remove(usersRoles);
+                                var addPunish = member.roles.add(punishRole);
+                                const waitTime = args[2];
 
-                            var justThePunishment = member.roles._roles;
-                            var removePunishment = member.roles.remove(justThePunishment);
-                            await sleep('1~s');
-                            console.log(usersRoles);
-                            var returnRoles = member.roles.add(usersRoles);
+                                var reason = args.splice(3).join(' ');
 
-                            const exit = await message.channel.send("I hope you learned your lesson you dirty sinner <@" + user.id + ">");
+                                await sleep(waitTime);
+
+                                var justThePunishment = member.roles._roles;
+                                var removePunishment = member.roles.remove(justThePunishment);
+                                await sleep('1~s');
+                                console.log(usersRoles);
+                                var returnRoles = member.roles.add(usersRoles);
+
+                                const exit = await message.channel.send("I hope you learned your lesson you dirty sinner <@" + user.id + ">");
+
+                                const logMessage = "A student was sentenced to the lash \n Student: " + user.username + "\n Time: " + waitTime + "\n Reason: " + reason;
+                                const logChannel = member.guild.channels.cache.find(channel => channel.name === "mother-superiors-logs");
+                                console.log(logChannel);
+                                logChannel.send(logMessage);
+
+                            }
                         }
-                        //log reason in #pennents logs
+                    } else {
+                        const msg = await message.channel.send("There is no sinner to punish here");
                     }
+
                 } else {
-                    const msg = await message.channel.send("There is no sinner to punish here");
+                    const msg = await message.channel.send("You naughty little boy, you aren't ordained");
                 }
                 break;
         }
