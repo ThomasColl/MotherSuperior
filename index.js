@@ -11,7 +11,18 @@ config({
 });
 
 client.on("ready", () => {
-    console.log("Its ALIVE");
+    console.log("The Mother Superior is here. You better prepare for some swift discipline");
+
+    // const punishmentRole = client.guild.roles.cache.find(role => role.name === "Pennant");
+    // if (!punishmentRole) {
+    //     console.log("There is no Pennant role in existence. If this role isnt there it wont work");
+    // }
+
+    // const logChannel = client.guild.channels.cache.find(channel => channel.name === "mother-superiors-logs");
+    // if (!logChannel) {
+    //     console.log("There is no channel called mother-superiors-logs. You will need to create one in order for this to work");
+    // }
+
 });
 
 client.login(process.env.TOKEN);
